@@ -34,7 +34,8 @@
     "redbox-react": "^1.2.10"
   },
   "scripts": {
-    "start": "dora --plugins \"proxy?watchDirs=./mock,webpack,webpack-hmr\"",
+
+    "start": "dora --plugins \"proxy?hostname=wangzc1.maimiaotech.com&port=7811&watchDirs=./mock,webpack,webpack-hmr?path=http://wangzc1.maimiaotech.com:30001/__webpack_hmr\"",
     "build": "atool-build",
     "test": "atool-test-mocha ./src/**/*-test.js"
   }

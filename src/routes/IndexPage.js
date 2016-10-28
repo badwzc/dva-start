@@ -7,8 +7,9 @@ import CampaignList from '../components/index/CampaignList'
 // import G2 from 'g2'
 function IndexPage({history, dispatch, campaigns}) {
     const {
-        loading, list
+        loading, list, autoCampaigns, auto_count, hout_count
     } = campaigns
+
     const campaignList = {
         loading,
         dataSource: list

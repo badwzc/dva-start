@@ -1,11 +1,14 @@
-import { create, remove, update, query } from '../services/campaigns';
+import { create, remove, update, query, queryAuto } from '../services/campaigns';
 
 export default {
-
     namespace: 'campaigns',
     state: {
         loading: false,
-        list: []
+        list: [],
+        autoCampaigns: {},
+        campaign_ids: [],
+        auto_count: 0,
+        hot_count: 0
 
             // {genre: 'Sports', sold: 275},
             // {genre: 'Strategy', sold: 115},
@@ -20,9 +23,13 @@ export default {
             history.listen(location => {
                 if (location.pathname === '/') {
                     dispatch({
-                        type: 'query',
-                        payload: location.query,
+                        type: 'queryCampaign',
+                        payload: location.queryCampaign
                     });
+                    // dispatch({
+                    //     type: 'queryAuto',
+                    //     payload: location.queryAuto,
+                    // });
                 }
             });
         },
@@ -36,21 +43,45 @@ export default {
                 yield put({
                     type: 'querySuccess',
                     payload: {
-                        list: data.data
+                        campaigns: data.data
                     }
                 })
             }
         },
+        *queryAuto({ payload }, {select, call, put }) {
+            yield put({ type: 'showLoading'});
+            const {data} = yield call(queryAuto);
+            if(data) {
+                yield put({
+                    type: 'autoSuccess',
+                    payload: {
+                        autoCampaigns: data.data
+                    }
+                })
+            }
+        },*queryCampaign({ payload }, {select, call, put }) {
+            yield put({ type: 'showLoading'});
+            const {data} = yield call(queryCampaign);
+            if(data) {
+                yield put({
+                    type: 'querySuccess',
+                    payload: {
+                        campaigns: data.data
+                    }
+                })
+            }
+        }
     },
 
     reducers: {
         showLoading(state) {
             return { ...state, loading: true };
         },
-        fetch(state, action) {
-            return { ...state, ...action.payload };
-        },
         querySuccess(state, action){
+            console.log({...state, ...action.payload, loading: false})
+            return {...state, ...action.payload, loading: false};
+        },
+        autoSuccess(state, action){
             return {...state, ...action.payload, loading: false};
         },
     }

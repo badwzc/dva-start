@@ -3,11 +3,11 @@
 const qs = require('qs');
 const mockjs = require('mockjs');
 
-let tableListData = [];
-if (!global.tableListData) {
+let campaignList = [];
+if (!global.campaignList) {
     const data = mockjs.mock({
         'data|15': [{
-            'id|+1': 1,
+            'id|+1': 100000,
             name: '@cname',
             'businessType|0-4': 1,
             'dayBudgetResult|0-500': 1,
@@ -19,10 +19,27 @@ if (!global.tableListData) {
             'status|0-4': 1
         }]
     });
-    tableListData = data.data;
-    global.tableListData = tableListData;
+    campaignList = data.data;
+    global.campaignList = campaignList;
 } else {
-    tableListData = global.tableListData;
+    campaignList = global.campaignList;
+}
+
+let autoCampaignList = {}
+if (!global.autoCampaignList) {
+    const data = mockjs.mock({
+        'data|1-2': {
+          '100000-100002': {
+            'cancel_status|0-1': 1,
+            'cpc_max|0-9.1': 1,
+            'settings_type|1': ['auto', 'hot']
+          }
+        }
+    });
+    autoCampaignList = data.data;
+    global.autoCampaignList = autoCampaignList;
+} else {
+    autoCampaignList = global.autoCampaignList;
 }
 
 module.exports = {
@@ -31,7 +48,15 @@ module.exports = {
     setTimeout(function () {
       res.json({
         success: true,
-        data: tableListData
+        data: campaignList
+      });
+    }, 500);
+  },
+  'GET /ajax_get_automatic_campaigns' (req, res) {
+    setTimeout(function () {
+      res.json({
+        success: true,
+        data: autoCampaignList
       });
     }, 500);
   },

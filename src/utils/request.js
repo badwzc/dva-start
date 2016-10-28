@@ -21,6 +21,14 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
+export function promise(urls, options) {
+  return Promise.all(urls.map(fetch))
+    .then(responses =>
+      Promise.all(responses.map(parseJSON))
+    ).then(datas => {
+      console.log(datas)
+    })
+}
 export default function request(url, options) {
   return fetch(url, options)
     .then(checkStatus)
